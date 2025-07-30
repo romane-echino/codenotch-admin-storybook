@@ -16,7 +16,7 @@ export default defineConfig({
       fileName: 'bundle',
       formats: ['es'],
     },
-    minify: true,
+    minify: 'esbuild',
     rollupOptions: {
     },
   },
