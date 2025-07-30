@@ -212,7 +212,7 @@ export function getConstrastColorFromName(name: ColorPalette): string {
 }
 
 export function getColorFromName(name: string, opaque: boolean = false): string {
-    let firstLetter = name.charAt(0).toLowerCase();
+    const firstLetter = name.charAt(0).toLowerCase();
 
     switch (firstLetter) {
         case 'a':

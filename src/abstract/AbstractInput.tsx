@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Sizing } from './Sizing';
+import { Helper } from './Helper';
 
 export interface IAbstractInputProps extends IInputProps, PropsWithChildren  {
     Focus: boolean;
@@ -48,7 +49,7 @@ export class AbstractInput extends React.Component<IAbstractInputProps, IAbstrac
     render() {
         return (
             <Sizing {...this.props} Containered={true}>
-                <div className='flex justify-between min-w-2xs'>
+                <div className='flex justify-between items-center min-w-2xs'>
                     <div>
                         {this.props.Title &&
                             <label className={`${this.props.Subtitle ? '' : 'mb-1.5'} block text-sm font-medium text-gray-700 dark:text-gray-400`}>
@@ -64,9 +65,9 @@ export class AbstractInput extends React.Component<IAbstractInputProps, IAbstrac
                     </div>
 
                     {this.props.Helper &&
-                        <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                       <Helper>
                             {this.props.Helper}
-                        </span>
+                       </Helper>
                     }
                 </div>
 

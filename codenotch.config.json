@@ -1,0 +1,5 @@
+{
+     "include": [ "src/components/**/*.tsx", "src/components/**/*.jsx"],
+     "exclude": ["node_modules", "src/abstract", "src/utils", "src/**/*.stories.*", "src/**/*.test.*", "src/**/*.d.*"],
+     "outDir": "./dist"
+}

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 
-import { TextInput } from '../components/TextInput';
+import { TextInput } from '../components/inputs/TextInput';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Example/TextInput',
+  title: 'Inputs/TextInput',
   component: TextInput,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
@@ -25,29 +25,34 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Primary: Story = {
+export const Basic: Story = {
   args: {
-    Placeholder: 'Enter text here',
-
   },
 };
 
-export const Secondary: Story = {
+export const FullSample: Story = {
   args: {
-    Placeholder: 'Another text input',
+    Placeholder: 'ex: John',
+    Value: 'John Doe',
+    Title: 'First Name',
+    Subtitle: 'Enter your first name',
+    Icon: 'fad fa-user',
+    Helper: 'This is your first name, it will be used in your profile.',
   },
 };
 
-export const Large: Story = {
+export const WithDefaultValue: Story = {
   args: {
-    Placeholder: 'Large text input',
-    Value: 'This is a large text input',
+    Value: 'Default Value',
+    Placeholder: 'Type something...',
   },
 };
 
-export const Small: Story = {
+export const WithSuffix: Story = {
   args: {
-    Placeholder: 'Small text input',
-    Value: 'Short',
+    Title:'Tenant url',
+    Subtitle: 'Enter your tenant url',
+    Placeholder: 'ex: mytenant',
+    Suffix: `.codenotch.com`,
   },
 };

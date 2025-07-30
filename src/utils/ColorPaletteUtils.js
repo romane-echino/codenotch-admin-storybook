@@ -1,46 +1,33 @@
-interface Palette {
-    [key: string]: FullColor;
-}
-
-interface HSL {
-    h: number;
-    s: number;
-    l: number;
-}
-
 class RGB {
-    constructor(r: number, g: number, b: number) {
+    constructor(r, g, b) {
+        Object.defineProperty(this, "r", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "g", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "b", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
         this.r = r;
         this.g = g;
         this.b = b;
     }
-
-    ToString(): string {
-        return `${this.r}, ${this.g}, ${this.b}`
+    ToString() {
+        return `${this.r}, ${this.g}, ${this.b}`;
     }
-    r: number;
-    g: number;
-    b: number;
 }
-
-interface Shade {
-    name: string;
-    lightness: number;
-}
-
-interface FullColor {
-    hsl: HSL;
-    rgb: RGB;
-    hex: string;
-    lightness: string;
-    text: string;
-}
-
-export type { HSL, Palette, Shade };
-
 const lumianceThreshold = 50;
-
-export function getTint(accent: string): string {
+export function getTint(accent) {
     const palette = tailwindcssPaletteGenerator(accent);
     let result = '';
     result += '--primary-color:' + palette['500'].rgb.ToString() + ";";
@@ -57,21 +44,18 @@ export function getTint(accent: string): string {
     result += '--primary-color-950:' + palette['950'].rgb.ToString() + ";";
     return result;
 }
-
-
-export function appyTint(accent: string): void {
+export function appyTint(accent) {
     const isTintSet = document.body.style.getPropertyValue('--primary-color') === '';
     if (isTintSet) {
         //@ts-nocheck
         document.body.style.cssText += getTint(accent);
-    } else {
+    }
+    else {
         console.warn('Tint is already set, skipping.');
     }
 }
-
-
-const tailwindcssPaletteGenerator = (hex: string) => {
-    const shades: Shade[] = [
+const tailwindcssPaletteGenerator = (hex) => {
+    const shades = [
         { name: "50", lightness: 98 },
         { name: "100", lightness: 95 },
         { name: "200", lightness: 90 },
@@ -84,41 +68,30 @@ const tailwindcssPaletteGenerator = (hex: string) => {
         { name: "900", lightness: 7 },
         { name: "950", lightness: 4 },
     ];
-
     const palette = generateColor({ hex, shades });
     const hsl = hexToHSL(hex);
-
     palette['500'] = {
         hex: hex,
         hsl: hsl,
         lightness: '500',
         rgb: hexToRgb(hex),
         text: hsl.l >= lumianceThreshold ? '#000000' : '#FFFFFF'
-    }
-
+    };
     return palette;
 };
-
-
-
-const generateColor = ({ hex, shades }: { hex: string; shades: Shade[]; }): Palette => {
+const generateColor = ({ hex, shades }) => {
     // convert hex to hsl
     const colorHSL = hexToHSL(hex);
-
     // initiate shade object
-    const obj: Palette = {};
-
+    const obj = {};
     // generate shades
-    shades.forEach(({ name, lightness }: Shade) => {
+    shades.forEach(({ name, lightness }) => {
         // deconstruct h & s
         const { h, s } = colorHSL;
-
         // generate shade hsl
-        const hsl: HSL = { h, s, l: lightness };
-
+        const hsl = { h, s, l: lightness };
         // convert hsl to hex
         const hex = hslToHEX(hsl);
-
         // update shade object
         obj[name] = {
             hex: hex,
@@ -128,14 +101,12 @@ const generateColor = ({ hex, shades }: { hex: string; shades: Shade[]; }): Pale
             rgb: hexToRgb(hex)
         };
     });
-
     return obj;
 };
-
-export const hslToHEX = ({ h, s, l }: HSL): string => {
+export const hslToHEX = ({ h, s, l }) => {
     l /= 100;
     const a = (s * Math.min(l, 1 - l)) / 100;
-    const f = (n: number) => {
+    const f = (n) => {
         const k = (n + h / 30) % 12;
         const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
         return Math.round(255 * color)
@@ -144,23 +115,16 @@ export const hslToHEX = ({ h, s, l }: HSL): string => {
     };
     return `#${f(0)}${f(8)}${f(4)}`;
 };
-
-
-export function hexToRgb(hex: string): RGB {
+export function hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (result) {
-        return new RGB(
-            parseInt(result[1], 16),
-            parseInt(result[2], 16),
-            parseInt(result[3], 16)
-        )
+        return new RGB(parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16));
     }
     else {
-        return new RGB(0, 0, 0)
+        return new RGB(0, 0, 0);
     }
 }
-
-export const hexToHSL = (hex: string): HSL => {
+export const hexToHSL = (hex) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || [];
     try {
         let r = parseInt(result[1], 16);
@@ -168,13 +132,13 @@ export const hexToHSL = (hex: string): HSL => {
         let b = parseInt(result[3], 16);
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         (r /= 255), (g /= 255), (b /= 255);
-        const max = Math.max(r, g, b),
-            min = Math.min(r, g, b);
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
         // eslint-disable-next-line prefer-const
-        let h = 0,s = 0,l = (max + min) / 2;
+        let h = 0, s = 0, l = (max + min) / 2;
         if (max == min) {
             h = s = 0; // achromatic
-        } else {
+        }
+        else {
             const d = max - min;
             s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
             switch (max) {
@@ -190,14 +154,14 @@ export const hexToHSL = (hex: string): HSL => {
             }
             h /= 6;
         }
-        const HSL: HSL = { h: 0, s: 0, l: 0 };
+        const HSL = { h: 0, s: 0, l: 0 };
         HSL.h = Math.round(h * 360);
         HSL.s = Math.round(s * 100);
         HSL.l = Math.round(l * 100);
         return HSL;
-    } catch {
+    }
+    catch {
         return { h: 0, s: 0, l: 0 };
     }
 };
-
 export { tailwindcssPaletteGenerator };

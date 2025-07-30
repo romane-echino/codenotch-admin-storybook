@@ -1,12 +1,12 @@
-import React from 'react';
-import { AbstractInput, IInputProps } from './AbstractInput';
+import { useEffect, useState } from 'react';
+import { AbstractInput, IInputProps } from '../../abstract/AbstractInput';
 
 
 export const TextInput: React.FC<IInputProps> = (props) => {
-	const [focused, setFocused] = React.useState(false);
+	const [focused, setFocused] = useState(false);
 
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (props.Value !== undefined && props.Value !== null && props.Value !== '') {
 			updateValue(props.Value as string);
 		}
