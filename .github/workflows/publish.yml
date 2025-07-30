@@ -1,5 +1,5 @@
 # Workflow for publishing with npm run cn:publish
-name: Publish with cn:publish
+name: Publish on Codenotch component library
 
 on:
   push:

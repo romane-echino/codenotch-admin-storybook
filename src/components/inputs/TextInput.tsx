@@ -13,7 +13,7 @@ export const TextInput: React.FC<IInputProps> = (props) => {
 	}, [props.Value]);
 
 	const updateValue = (value: string) => {
-		//props.onPropertyChanged('value', undefined, value)
+		props.onPropertyChanged?.('value', undefined, value)
 		if (props.OnChange) {
 			props.OnChange(value);
 		}

@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { Sizing } from './Sizing';
 import { Helper } from './Helper';
+import { IBindableComponentProps } from '../../codenotch/codenotch';
 
 export interface IAbstractInputProps extends IInputProps, PropsWithChildren  {
     Focus: boolean;
@@ -11,7 +12,7 @@ export interface IAbstractListAction {
     index: number
 }
 
-export interface IInputProps {
+export interface IInputProps extends IBindableComponentProps {
     Title?: string;
     Subtitle?: string;
     Placeholder?: string;

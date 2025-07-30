@@ -29,7 +29,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 		}
 
 
-		this.props.declareFunction('disable', (value: boolean) => {
+		this.props.declareFunction?.('disable', (value: boolean) => {
 			this.setState({ disabled: value });
 		});
 	}
@@ -83,8 +83,7 @@ export class Form extends React.Component<IFormProps, IFormState> {
 			const lastPart = pathParts[lastIndex];
 			current[lastPart] = value;
 
-			console.log('Form field changed', JSON.stringify(newValue, null, 2));
-			this.props.onPropertyChanged('value', undefined, newValue);
+			this.props.onPropertyChanged?.('value', undefined, newValue);
 
 			if (this.props.OnChange) {
 				this.props.OnChange(newValue);
@@ -99,9 +98,9 @@ export class Form extends React.Component<IFormProps, IFormState> {
 
 			//@ts-expect-error Complexe children props handling
 			const effectiveProps: any = { ...child.props };
-			const field: string | undefined = this.props.childrenProps[index]?.Field;
+			const field: string | undefined = this.props.childrenProps?.[index]?.Field;
 			effectiveProps.children.props = {
-				...this.props.childrenProps[index],
+				...this.props.childrenProps?.[index],
 				...effectiveProps?.children?.props,
 				OnChange: field ? (value: any) => this.fieldChanged(field, value) : undefined,
 				OnSelect: field ? (value: IAbstractListAction) => this.fieldChanged(field, value.value) : undefined,
