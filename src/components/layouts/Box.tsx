@@ -1,6 +1,6 @@
-import { Sizing } from "../../abstract/Sizing";
+import { ISizingElementProps, Sizing } from "../../abstract/Sizing";
 
-export interface IBoxProps extends React.PropsWithChildren {
+export interface IBoxProps extends React.PropsWithChildren, ISizingElementProps {
 	Title?: string;
 	Subtitle?: string;
 	Actions?: React.ReactNode;
@@ -68,9 +68,10 @@ export const Box: React.FC<IBoxProps> = (props) => {
 export const BoxTitle: React.FC<IBoxProps> = (props) => {
 	return (
 		<>
-			{(props.Title !== undefined || props.Subtitle !== undefined || props.Actions !== undefined) &&
+			{(props.Title || props.Subtitle || props.Actions !== undefined) &&
 				<div className='flex flex-col sm:flex-row gap-2 sm:justify-between mb-4 sm:items-center'>
-					<div>
+					{(props.Title || props.Subtitle) &&
+						<div>
 						{props.Title &&
 							<h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
 								{props.Title}
@@ -83,6 +84,7 @@ export const BoxTitle: React.FC<IBoxProps> = (props) => {
 							</p>
 						}
 					</div>
+					}
 
 					{props.Actions &&
 						<div className='flex items-center gap-3'>

@@ -7,17 +7,16 @@ import compression from 'vite-plugin-compression2'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), cssInjectedByJsPlugin(), compression({
-    include: /\.(js|mjs|cjs)$/,
+    include: /\.(js|cjs)$/,
     algorithms: ['gzip']
   })],
    build: {
     lib: {
       entry: 'src/index.ts',
-      fileName: 'bundle',
-      formats: ['es'],
+      formats: ['es','cjs'],
     },
-    minify: 'esbuild',
-    rollupOptions: {
-    },
+   /*rollupOptions: {
+      external: ['react'],
+    },*/
   },
 })

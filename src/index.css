@@ -2,6 +2,8 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@source inline("bg-{turquoise,emerald,peter-river,amethyst,wet-asphalt,green-sea,nephritis,belize-hole,wisteria,midnight-blue,sunflower,carrot,alizarin,clouds,concrete,orange,pumpkin,pomegranate,silver,asbestos}/15");
+
 
 textarea::-webkit-resizer{
 display: none;

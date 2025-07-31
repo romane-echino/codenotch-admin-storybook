@@ -59,7 +59,7 @@ export function getTint(accent: string): string {
 }
 
 
-export function appyTint(accent: string): void {
+export function applyTint(accent: string): void {
     const isTintSet = document.body.style.getPropertyValue('--primary-color') === '';
     if (isTintSet) {
         //@ts-nocheck

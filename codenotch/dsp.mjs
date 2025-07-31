@@ -1,9 +1,8 @@
-
 import fs from "fs";
 import fg from 'fast-glob';
 import process from 'process';
 import { parse } from 'react-docgen-typescript';
-import pkg from '../package.json' with { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 import path from 'path';
 import ora from 'ora';
 
@@ -39,7 +38,7 @@ import ora from 'ora';
     },
     "last_updated_by": "unknown",
     "ext-com_echino-library": {
-      "logo": "",
+      "logo": pkg.codenotch?.['library-logo'],
       "displayName": pkg.codenotch?.['library-name'],
     },
     "entities": []
@@ -74,6 +73,11 @@ import ora from 'ora';
       shouldExtractLiteralValuesFromEnum: true,
       shouldExtractValuesFromUnion: true,
     });
+
+    if( !parsedComponent || parsedComponent.length === 0) {
+      spinner.warn(`No valid component found in ${file}`);
+      continue;
+    }
 
     // Parse the component file to extract tags
     if (parsedComponent && parsedComponent.length > 0 && parsedComponent[0].tags) {

@@ -27,24 +27,27 @@ const jsonContentType = { blobHTTPHeaders: { blobContentType: 'application/json'
 
 console.log(config.outDir);
 console.log(path.join(process.cwd(), config.outDir));
-const includes =[
+const includes = [
     config.outDir + '/*.js.gz',
-    config.outDir + '/*.mjs.gz',
     config.outDir + '/*.cjs.gz',
-
+    config.outDir + '/*.js',
+    config.outDir + '/*.cjs',
 ]
+
+const hasGZ = includes.some(include => include.endsWith('.gz'));
+
 const outFiles = await fg(includes, {
     cwd: process.cwd(),
     absolute: true,
 });
 
-if( outFiles.length === 0) {
+if (outFiles.length === 0) {
     spinner.fail(`No output files found in ${config.outDir}`);
     exit(1);
 }
 
 jsContentType.blobHTTPHeaders.blobContentEncoding = 'gzip';
-const bundleContent = fs.readFileSync(outFiles[0]);
+
 
 let name = pkg.codenotch?.['library-name'] || pkg.name;
 let company = '';
@@ -71,10 +74,16 @@ else {
     latest = `${name}@latest`;
 }
 
-const bundleName = `${pkgFolder}bundle.js`;
-const bundleBlob = containerClient.getBlockBlobClient(bundleName);
-const bundleResponse = await bundleBlob.upload(bundleContent, bundleContent.length, jsContentType);
-spinner.info(`Bundle uploaded: ${bundleName} (${bundleResponse._response.status})`);
+const baseBundleName = `${pkgFolder}bundle${hasGZ ? '.gz' : ''}.js`;
+
+for (const file of hasGZ ? outFiles.filter(f => f.endsWith('.gz')) : outFiles) {
+    const bundleContent = fs.readFileSync(file);
+    const extension = path.basename(file).split('.').slice(1).join('.');
+    const bundleName = `${pkgFolder}bundle.${extension}`;
+    const bundleBlob = containerClient.getBlockBlobClient(bundleName);
+    const bundleResponse = await bundleBlob.upload(bundleContent, bundleContent.length, jsContentType);
+    spinner.info(`Bundle uploaded: ${bundleName} (${bundleResponse._response.status})`);
+}
 
 const dspContent = fs.readFileSync(path.join(process.cwd(), config.outDir, 'dsp.json'), 'utf8');
 const dspName = `${pkgFolder}dsp.json`
@@ -90,7 +99,7 @@ tableService.createTableIfNotExists('compMP', function (error, result, response)
         var entity = {
             PartitionKey: entGen.String(partition),
             RowKey: entGen.String(row),
-            bundleLocation: entGen.String(bundleName),
+            bundleLocation: entGen.String(baseBundleName),
             dspLocation: entGen.String(dspName),
             packageLocation: entGen.String(pkgFolder),
             version: entGen.String(pkg.version),
@@ -112,7 +121,7 @@ tableService.createTableIfNotExists('compMP', function (error, result, response)
         var latestEntity = {
             PartitionKey: entGen.String(partition),
             RowKey: entGen.String(latest),
-            bundleLocation: entGen.String(bundleName),
+            bundleLocation: entGen.String(baseBundleName),
             dspLocation: entGen.String(dspName),
             packageLocation: entGen.String(pkgFolder),
             version: entGen.String(pkg.version),
