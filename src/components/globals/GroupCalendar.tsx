@@ -1,5 +1,4 @@
 import React from 'react';
-import './GroupCalendar.scss';
 import dayjs from 'dayjs';
 import { getColorFromName } from '../../utils/DefaultColorPalette';
 import { Md5 } from 'ts-md5';

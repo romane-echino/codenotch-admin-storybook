@@ -1,5 +1,4 @@
 import React from 'react';
-import './RadioButton.scss';
 import { RadioGroup, Radio, Label } from '@headlessui/react';
 import { Action, IBindableComponentProps, IChildrenInheritedProps } from '../../../codenotch/codenotch';
 
